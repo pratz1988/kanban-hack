@@ -8,7 +8,13 @@ export default function TaskCard(props) {
       id={[props.timeId]}
       onDragStart={props.onDragStart}
     >
-      <p className="taskCardTitle">{props.taskTitle}:</p>
+      <span className="deleteButton">
+        {" "}
+        <i class="fas fa-pencil-alt"></i> ✖️{" "}
+      </span>
+      <p className="taskCardTitle">
+        {props.taskTitle}:{/* <span>🕚</span>  */}
+      </p>
       <p> {props.taskDescription} </p>
     </div>
   );

@@ -10,10 +10,11 @@ export default class AddNewTaskForm extends Component {
 
   onSubmit(event) {
     event.preventDefault();
-    const taskDescription = this.textInput.value.trim();
-    const taskTitle = "title";
+    const newCard = this.textInput.value.trim();
+    const newCardArray = newCard.split(",");
+    const taskTitle = newCardArray[0];
+    const taskDescription = newCardArray[1];
     const listNumber = this.props.formNum;
-    console.log(listNumber);
     if (taskDescription && this.props.onAdd) {
       this.props.onAdd(taskTitle, taskDescription, listNumber);
     }
@@ -41,6 +42,7 @@ export default class AddNewTaskForm extends Component {
           className="task-input"
           ref={(input) => (this.textInput = input)}
           aria-label="Add a task"
+          placeholder="add task title, description"
         />
         <div>
           <button className="button add-button">Add Task</button>

@@ -43,3 +43,8 @@
   text-align: left;
   border-bottom: 1px dotted black;
 }
+
+.deleteButton {
+  float: right;
+  font-size: 10px;
+}
