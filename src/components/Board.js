@@ -10,7 +10,7 @@ export default class Board extends Component {
       const rawList = localStorage.getItem("taskItems");
       const parsedList = JSON.parse(rawList);
       this.state = { taskItems: parsedList };
-      console.log("LS.." + this.state.taskItems[0]);
+      console.log("LS..", this.state.taskItems[0]);
     } else {
       this.state = {
         taskItems: [
@@ -71,9 +71,19 @@ export default class Board extends Component {
         ],
       };
     }
-
+    //Function to update taskItems in localStorage
+    function updateProfile(updatedTaskItems) {
+      const taskItems = JSON.parse(localStorage.getItem("taskItems"));
+      Object.keys(updatedTaskItems).forEach((key) => {
+        taskItems[key] = updatedTaskItems[key];
+        console.log(key);
+      });
+    }
+    updateProfile(this.state.taskItems);
     localStorage.setItem("taskItems", JSON.stringify(this.state.taskItems));
   }
+
+  //Adding new taskcards to the taskItems List
 
   render() {
     const taskItems = this.state.taskItems.map((taskItem, index) => (
