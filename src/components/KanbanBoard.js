@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./Board.css";
+import "./KanbanBoard.css";
 import TaskItems from "./TaskItems";
 
 export default class Board extends Component {
@@ -7,8 +7,8 @@ export default class Board extends Component {
     super(props);
 
     if (localStorage.getItem("taskItems")) {
-      const rawList = localStorage.getItem("taskItems");
-      const parsedList = JSON.parse(rawList);
+      const localStorageList = localStorage.getItem("taskItems");
+      const parsedList = JSON.parse(localStorageList);
       this.state = { taskItems: parsedList };
       console.log("LS..", this.state.taskItems[0]);
     } else {
@@ -72,23 +72,89 @@ export default class Board extends Component {
       };
     }
     //Function to update taskItems in localStorage
-    function updateProfile(updatedTaskItems) {
+    function updateTaskItems(updatedTaskItems) {
       const taskItems = JSON.parse(localStorage.getItem("taskItems"));
       Object.keys(updatedTaskItems).forEach((key) => {
         taskItems[key] = updatedTaskItems[key];
         console.log(key);
       });
     }
-    updateProfile(this.state.taskItems);
+    updateTaskItems(this.state.taskItems);
     localStorage.setItem("taskItems", JSON.stringify(this.state.taskItems));
   }
 
   //Adding new taskcards to the taskItems List
+  addTaskCard(taskTitle, taskDescription, listNumber) {
+    const localStorageList = localStorage.getItem("taskItems");
+    const parsedList = JSON.parse(localStorageList);
+
+    const newTaskCard = {
+      taskTitle,
+      taskDescription,
+      listNumber,
+      timeId: new Date().valueOf(),
+    };
+    parsedList[listNumber].cards.push(newTaskCard);
+
+    this.setState({
+      taskItems: parsedList,
+    });
+    localStorage.setItem("taskItems", JSON.stringify(parsedList));
+  }
+
+  // Getting a listNumber of OnDraging a Taskcard
+  onDragStart = (e, fromList) => {
+    const dragInfo = {
+      taskId: e.currentTarget.id,
+      fromList: fromList,
+    };
+    localStorage.setItem("dragInfo", JSON.stringify(dragInfo));
+  };
+
+  onDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  onDrop = (e, listNum) => {
+    const droppedTask = localStorage.getItem("dragInfo");
+    const localStorageList = localStorage.getItem("taskItems");
+    const parsedList = JSON.parse(localStorageList);
+    const parsedDragInfo = JSON.parse(droppedTask);
+
+    const cardsArray = parsedList[parsedDragInfo.fromList].cards;
+    const taskCard = cardsArray.find(
+      (card) => card.timeId == parsedDragInfo.taskId
+    );
+    const indexOfCard = cardsArray.findIndex(
+      (card) => card.timeId == parsedDragInfo.taskId
+    );
+    parsedList[parsedDragInfo.fromList].cards.splice(indexOfCard, 1);
+    parsedList[listNum].cards.push({
+      ...taskCard,
+      listNumber: parseInt(listNum),
+    });
+
+    //sync the state and localStorage
+    this.setState({
+      taskItems: parsedList,
+    });
+    localStorage.setItem("taskItems", JSON.stringify(parsedList));
+  };
 
   render() {
     const taskItems = this.state.taskItems.map((taskItem, index) => (
       <li className="list-wrapper" key={index}>
-        <TaskItems {...taskItem} />
+        <TaskItems
+          {...taskItem}
+          onAdd={(taskTitle, taskDescription, listNumber) =>
+            this.addTaskCard(taskTitle, taskDescription, listNumber)
+          }
+          onDragStart={(e, fromList) => this.onDragStart(e, `${taskItem.id}`)}
+          onDragOver={(e) => this.onDragOver(e)}
+          onDrop={(e, listNum) => {
+            this.onDrop(e, `${taskItem.id}`);
+          }}
+        />
       </li>
     ));
     return (

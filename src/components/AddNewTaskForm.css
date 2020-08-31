@@ -1,0 +1,59 @@
+.task-input {
+  background: #fafafa;
+  margin-bottom: 8px;
+  padding: 8px;
+  border-radius: 2px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+  border: none;
+  font-size: 16px;
+}
+
+.button {
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.button:hover {
+  opacity: 0.85;
+  transition: 0.3s;
+}
+
+.add-button {
+  background-color: rgb(43, 114, 221);
+}
+
+.cancel-button {
+  background-color: rgb(172, 52, 31);
+}
+
+.open-add-button {
+  padding: 8px;
+  border-radius: 2px;
+}
+
+.open-add-button a {
+  text-decoration: none;
+}
+
+.list .open-add-button:hover {
+  background: #bdbdbd;
+}
+
+.list .open-add-button a {
+  color: black;
+}
+
+.addNewCard {
+  background: #ffffff;
+  margin-top: -5px;
+  margin-bottom: 15px;
+  padding: 5px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 20px;
+  /* width: 180px; */
+}
